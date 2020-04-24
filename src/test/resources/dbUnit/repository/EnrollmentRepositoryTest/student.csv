@@ -1,0 +1,3 @@
+id,student_id,password,given_name,family_name,department_id,admission_year,created_by,created_at,updated_by,updated_at
+1,200001L,$2a$10$jKNGop3oU3jUlcfWVD6tO..T/gJBG6jFGGj9mHVhIk0EpbfsxGfBO,John,Anderson,1,2015,0,2020-04-18 01:29:07,0,2020-04-22 22:59:43
+2,200002L,$2a$10$jKNGop3oU3jUlcfWVD6tO..T/gJBG6jFGGj9mHVhIk0EpbfsxGfBO,Mary,Wicks,1,2014,0,2020-04-18 01:29:07,0,2020-04-22 22:59:43

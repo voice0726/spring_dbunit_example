@@ -1,0 +1,5 @@
+faculty
+department
+course
+student
+enrollment

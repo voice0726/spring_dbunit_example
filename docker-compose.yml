@@ -1,0 +1,33 @@
+version: "3"
+services:
+  spring_dbunit_example:
+    image: mysql:5.7
+    container_name: spring_dbunit_example
+    restart: always
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+    ports:
+      - 13306:3306
+    volumes:
+      - ./docker/db/mysql_init:/docker-entrypoint-initdb.d
+      - ./docker/db/mysql_data:/var/lib/mysql
+      - ./docker/db/conf.d:/etc/mysql/conf.d
+
+  spring_dbunit_example_test:
+    image: mysql:5.7
+    container_name: spring_dbunit_example_test
+    restart: always
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: unit-test
+    ports:
+      - 23306:3306
+    volumes:
+      - ./docker/db/mysql_init_test:/docker-entrypoint-initdb.d
+      - ./docker/db/conf.d:/etc/mysql/conf.d
+

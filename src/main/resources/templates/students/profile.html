@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+  <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+  <title>Student profile</title>
+</head>
+<body>
+<div class="container">
+  <h2 th:text="${profile.getFullName()}"></h2>
+  <h5>Enrollment year</h5>
+  <p th:text="${profile.admissionYear}"></p>
+  <h5>Enrolled courses</h5>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Course ID</th>
+      <th>Course title</th>
+      <th>Year</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${profile.enrollments}" th:object="${e}">
+      <td th:text="*{getCourse().getCoursePrefix() + getCourse().getCourseNum()}"></td>
+      <td th:text="*{getCourse().name}"></td>
+      <td th:text="*{year}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
