@@ -1,7 +1,6 @@
 package jp.voice0726.spring_junit_example.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -13,8 +12,6 @@ public class Enrollment extends AbstractEntity {
     private long courseId;
     private Student student;
     private Course course;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
     @Id
     @Column(name = "id")
@@ -65,13 +62,15 @@ public class Enrollment extends AbstractEntity {
                 year == that.year &&
                 studentId == that.studentId &&
                 courseId == that.courseId &&
-                Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(updatedAt, that.updatedAt);
+                createdBy == that.createdBy &&
+                createdAt.equals(createdAt) &&
+                updatedBy == that.updatedBy &&
+                updatedAt.equals(that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, year, studentId, courseId, createdAt, updatedAt);
+        return Objects.hash(id, year, studentId, courseId, createdBy, createdAt, updatedBy, updatedAt);
     }
 
     @ManyToOne
@@ -94,23 +93,4 @@ public class Enrollment extends AbstractEntity {
         this.course = course;
     }
 
-    @Basic
-    @Column(name = "created_at")
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Basic
-    @Column(name = "updated_at")
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

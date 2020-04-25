@@ -1,8 +1,6 @@
 package jp.voice0726.spring_junit_example.service.impl;
 
 import jp.voice0726.spring_junit_example.config.AppConfig;
-import jp.voice0726.spring_junit_example.dto.StudentIndexDto;
-import jp.voice0726.spring_junit_example.dto.StudentProfileDto;
 import jp.voice0726.spring_junit_example.entity.Course;
 import jp.voice0726.spring_junit_example.entity.Enrollment;
 import jp.voice0726.spring_junit_example.entity.Student;
@@ -12,7 +10,6 @@ import jp.voice0726.spring_junit_example.specification.NameSearchSpecification;
 import jp.voice0726.spring_junit_example.user.LoginUser;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
@@ -115,13 +112,10 @@ class StudentServiceImplTest {
         student.setGivenName("Test");
         student.setEnrollments(Arrays.asList(en));
 
-        ModelMapper modelMapper = new ModelMapper();
-        StudentProfileDto dto = modelMapper.map(student, StudentProfileDto.class);
-
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-        StudentProfileDto fetched = studentService.getProfileById(1L);
+        Student fetched = studentService.getStudentById(1L);
         assertThat(fetched).usingRecursiveComparison()
-                .isEqualTo(dto);
+                .isEqualTo(student);
 
     }
 
@@ -129,7 +123,7 @@ class StudentServiceImplTest {
     void getStudentProfileNotFound() {
         long id = 1L;
         when(studentRepository.findById(id)).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> studentService.getProfileById(1L))
+        assertThatThrownBy(() -> studentService.getStudentById(1L))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("No student record found with id '" + id + "'");
 

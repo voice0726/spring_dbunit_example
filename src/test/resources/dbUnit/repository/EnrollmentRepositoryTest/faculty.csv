@@ -1,2 +1,2 @@
-id,given_name,family_name,created_at,updated_at
-1,James,William,2020-04-18 15:03:28,2020-04-18 15:03:28
+id,given_name,family_name,created_by,created_at,updated_by,updated_at
+1,James,William,0,2020-04-18 15:03:28,0,2020-04-18 15:03:28

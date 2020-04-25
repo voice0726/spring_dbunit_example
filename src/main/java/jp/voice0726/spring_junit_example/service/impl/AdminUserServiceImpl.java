@@ -2,7 +2,7 @@ package jp.voice0726.spring_junit_example.service.impl;
 
 import jp.voice0726.spring_junit_example.entity.Admin;
 import jp.voice0726.spring_junit_example.repository.AdminRepository;
-import jp.voice0726.spring_junit_example.user.AdminUser;
+import jp.voice0726.spring_junit_example.user.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +26,6 @@ public class AdminUserServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Admin> op = adminRepository.findByUsername(username);
         Admin admin = op.orElseThrow(() -> new UsernameNotFoundException("Username not found."));
-        return new AdminUser(admin.getId(), admin.getName(), admin.getUsername(), admin.getPassword());
-        // todo change adminuser to loginuser
+        return new LoginUser(admin.getId(), admin.getName(), admin.getUsername(), admin.getPassword(), "ROLE_ADMIN");
     }
 }

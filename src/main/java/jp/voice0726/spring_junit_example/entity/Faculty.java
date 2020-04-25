@@ -1,7 +1,6 @@
 package jp.voice0726.spring_junit_example.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -11,8 +10,6 @@ public class Faculty extends AbstractEntity {
     private String givenName;
     private String familyName;
     private Collection<Course> courses;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
     @Id
     @Column(name = "id")
@@ -44,23 +41,6 @@ public class Faculty extends AbstractEntity {
         this.familyName = familyName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Faculty faculty = (Faculty) o;
-        return id == faculty.id &&
-                Objects.equals(givenName, faculty.givenName) &&
-                Objects.equals(familyName, faculty.familyName) &&
-                Objects.equals(createdAt, faculty.createdAt) &&
-                Objects.equals(updatedAt, faculty.updatedAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, givenName, familyName, createdAt, updatedAt);
-    }
-
     @OneToMany(mappedBy = "faculty")
     public Collection<Course> getCourses() {
         return courses;
@@ -70,23 +50,23 @@ public class Faculty extends AbstractEntity {
         this.courses = coursesById;
     }
 
-    @Basic
-    @Column(name = "created_at")
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Faculty that = (Faculty) o;
+        return id == that.id &&
+                givenName.equals(that.givenName) &&
+                familyName.equals(that.familyName) &&
+                Objects.equals(courses, that.courses) &&
+                createdBy == that.createdBy &&
+                createdAt.equals(that.createdAt) &&
+                updatedBy == that.updatedBy &&
+                updatedAt.equals(that.updatedAt);
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Basic
-    @Column(name = "updated_at")
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, givenName, familyName, courses, createdBy, createdAt, updatedBy, updatedAt);
     }
 }

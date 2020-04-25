@@ -10,18 +10,21 @@
 <body>
 <div class="container">
   <h2>Student list</h2>
+  <div>
+    <button class="right-align btn btn-primary" onclick="location.href='./add'">学生登録</button>
+  </div>
   <table class="table table-striped">
     <thead>
     <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>enroll year</th>
+      <th>ID</th>
+      <th>氏名</th>
+      <th>入学年</th>
     </tr>
     </thead>
     <tbody>
     <tr th:inline="text" th:each="student : ${students}" th:object="${student}">
       <td>[[*{id}]]</td>
-      <td><a th:href="@{'/students/__*{id}__'}">[[*{getFullName()}]]</a></td>
+      <td><a th:href="@{'/admin/students/__*{id}__'}">[[*{getFullName()}]]</a></td>
       <td>[[*{admissionYear}]]</td>
     </tr>
     </tbody>

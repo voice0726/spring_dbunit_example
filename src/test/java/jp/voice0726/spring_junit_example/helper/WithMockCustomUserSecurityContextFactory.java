@@ -1,6 +1,5 @@
 package jp.voice0726.spring_junit_example.helper;
 
-import jp.voice0726.spring_junit_example.user.AdminUser;
 import jp.voice0726.spring_junit_example.user.LoginUser;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,9 +19,9 @@ public class WithMockCustomUserSecurityContextFactory
     public SecurityContext createSecurityContext(WithMockCustomUser customUser) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        UserDetails principal = "ADMIN".equals(customUser.role())
-                ? new AdminUser(customUser.id(), customUser.name(), customUser.username(), customUser.password())
-                : new LoginUser(customUser.id(), customUser.name(), customUser.username(), customUser.password());
+        UserDetails principal = new LoginUser(
+                customUser.id(), customUser.name(), customUser.username(), customUser.password(), customUser.role()
+        );
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(principal, "password", principal.getAuthorities());
         context.setAuthentication(auth);

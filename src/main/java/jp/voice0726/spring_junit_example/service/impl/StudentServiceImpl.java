@@ -1,14 +1,11 @@
 package jp.voice0726.spring_junit_example.service.impl;
 
-import jp.voice0726.spring_junit_example.dto.StudentIndexDto;
-import jp.voice0726.spring_junit_example.dto.StudentProfileDto;
-import jp.voice0726.spring_junit_example.user.LoginUser;
 import jp.voice0726.spring_junit_example.entity.Student;
 import jp.voice0726.spring_junit_example.repository.StudentRepository;
 import jp.voice0726.spring_junit_example.service.StudentService;
 import jp.voice0726.spring_junit_example.specification.NameSearchSpecification;
+import jp.voice0726.spring_junit_example.user.LoginUser;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,13 +14,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final ModelMapper modelMapper;
     private final StudentRepository studentRepository;
 
     @Override
@@ -53,8 +53,6 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findAll(spec, pageable);
     }
 
-
-
     private List<String> splitQuery(String query) {
         List<String> keywords = new ArrayList<>();
 
@@ -66,12 +64,26 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentProfileDto getProfileById(long id) {
+    public Student getStudentById(long id) {
         Optional<Student> op = studentRepository.findById(id);
-        Student student = op.orElseThrow(
+        return op.orElseThrow(
                 () -> new EntityNotFoundException("No student record found with id '" + id + "'")
         );
-        return modelMapper.map(student, StudentProfileDto.class);
+    }
+
+    @Override
+    @Transactional
+    public Student addStudent(Student student) {
+        return studentRepository.saveAndFlush(student);
+    }
+
+    @Override
+    @Transactional
+    public Student updateStudent(Student student) {
+        if (!studentRepository.existsById(student.getId())) {
+            throw new EntityNotFoundException("No student record found with id '" + student.getId() + "'");
+        }
+        return studentRepository.saveAndFlush(student);
     }
 
     @Override
@@ -79,6 +91,6 @@ public class StudentServiceImpl implements StudentService {
         Optional<Student> op = studentRepository.findByStudentId(username);
         Student student = op.orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String name = student.getGivenName() + " " + student.getFamilyName();
-        return new LoginUser(student.getId(), name, student.getStudentId(), student.getPassword());
+        return new LoginUser(student.getId(), name, student.getStudentId(), student.getPassword(), "ROLE_USER");
     }
 }

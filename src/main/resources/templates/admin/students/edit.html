@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <title>index page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+  <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container">
+  <h2>学生情報編集</h2>
+  <form th:action="@{/admin/students/edit/__*{id}__}" method="post" th:object="${studentEditForm}">
+    <div class="form-group">
+      <label class="form-check-label" for="month">学籍番号</label>
+      <span th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}" style="color: red"></span>
+      <input id="month" class="form-control" type="text"
+             th:field="*{studentId}">
+    </div>
+    <div class="form-group">
+      <label class="form-check-label" for="brand">姓</label>
+      <span th:if="${#fields.hasErrors('familyName')}" th:errors="*{familyName}" style="color: red"></span>
+      <input id="brand" class="form-control" type="text"
+             th:field="*{familyName}">
+    </div>
+    <div class="form-group">
+      <label class="form-check-label" for="card-number">名</label>
+      <span th:if="${#fields.hasErrors('givenName')}" th:errors="*{givenName}" style="color: red"></span>
+      <input id="card-number" class="form-control" type="text"
+             th:field="*{givenName}">
+    </div>
+    <div class="form-group">
+      <label class="form-check-label" for="year">入学年</label>
+      <span th:if="${#fields.hasErrors('admissionYear')}" th:errors="*{admissionYear}" style="color: red"></span>
+      <input id="year" class="form-control" type="text"
+             th:field="*{admissionYear}">
+    </div>
+    <div class="form-group">
+      <label class="form-select-label" for="department">所属学部</label>
+      <span th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}" style="color: red"></span>
+      <select id="department" class="form-control" th:field="*{departmentId}">
+        <option value="0">所属学部を選択してください。</option>
+        <option th:each="dept : ${departments}"  th:inline="text" th:value="${dept.key}">[[${dept.value}]]</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="submit">
+    </div>
+  </form>
+</div>
+</body>
+</html>

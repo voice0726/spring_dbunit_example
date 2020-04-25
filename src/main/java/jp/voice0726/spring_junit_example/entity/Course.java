@@ -15,8 +15,8 @@ public class Course extends AbstractEntity {
     private long instructorId;
     private Faculty taughtBy;
     private Collection<Enrollment> enrollment;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+
+
     private Faculty faculty;
     private Collection<Enrollment> enrollments;
 
@@ -80,26 +80,6 @@ public class Course extends AbstractEntity {
         this.instructorId = instructorId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id &&
-                courseNum == course.courseNum &&
-                maxEnroll == course.maxEnroll &&
-                instructorId == course.instructorId &&
-                Objects.equals(coursePrefix, course.coursePrefix) &&
-                Objects.equals(name, course.name) &&
-                Objects.equals(createdAt, course.createdAt) &&
-                Objects.equals(updatedAt, course.updatedAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, coursePrefix, courseNum, name, maxEnroll, instructorId, createdAt, updatedAt);
-    }
-
     @ManyToOne
     @JoinColumn(name = "instructor_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Faculty getTaughtBy() {
@@ -156,5 +136,31 @@ public class Course extends AbstractEntity {
 
     public void setEnrollments(Collection<Enrollment> enrollments) {
         this.enrollments = enrollments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id &&
+                courseNum == course.courseNum &&
+                maxEnroll == course.maxEnroll &&
+                instructorId == course.instructorId &&
+                coursePrefix.equals(course.coursePrefix) &&
+                name.equals(course.name) &&
+                taughtBy.equals(course.taughtBy) &&
+                Objects.equals(enrollment, course.enrollment) &&
+                faculty.equals(course.faculty) &&
+                Objects.equals(enrollments, course.enrollments) &&
+                createdBy == course.createdBy &&
+                createdAt.equals(course.createdAt) &&
+                updatedBy == course.updatedBy &&
+                updatedAt.equals(course.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, coursePrefix, courseNum, name, maxEnroll, instructorId, taughtBy, enrollment, faculty, enrollments, createdBy, createdAt, updatedBy, updatedAt);
     }
 }

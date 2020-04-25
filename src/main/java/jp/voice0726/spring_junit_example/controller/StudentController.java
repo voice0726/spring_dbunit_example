@@ -9,13 +9,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,14 +33,19 @@ public class StudentController {
 
     @GetMapping("/{studentId}")
     public ModelAndView profile(ModelAndView mav, @PathVariable("studentId") long studentId) {
-        StudentProfileDto profile = studentService.getProfileById(studentId);
-        mav.addObject("profile", profile);
+        Student profile = studentService.getStudentById(studentId);
+        StudentProfileDto profileDto = convertToDto(profile);
+        mav.addObject("profile", profileDto);
         mav.setViewName("students/profile");
         return mav;
     }
 
     private Page<StudentIndexDto> convertToDto(Page<Student> studentPage) {
         return studentPage.map(e -> modelMapper.map(e, StudentIndexDto.class));
+    }
+
+    private StudentProfileDto convertToDto(Student student) {
+        return modelMapper.map(student, StudentProfileDto.class);
     }
 
 }

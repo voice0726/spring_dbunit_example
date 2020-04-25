@@ -22,5 +22,5 @@ public @interface WithMockCustomUser {
 
     String password() default "123456";
 
-    String role() default "USER";
+    String role() default "ROLE_USER";
 }

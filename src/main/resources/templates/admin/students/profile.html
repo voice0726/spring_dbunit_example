@@ -10,7 +10,10 @@
 <body>
 <div class="container">
   <h2 th:text="${profile.getFullName()}"></h2>
-  <h5>Enrollment year</h5>
+  <button class="right-align btn btn-primary" th:onclick="'location.href=\'edit/' + ${profile.id} + '\''">編集</button>
+  <h5>所属</h5>
+  <p th:text="${profile.department.name}"></p>
+  <h5>入学年</h5>
   <p th:text="${profile.admissionYear}"></p>
   <h5>Enrolled courses</h5>
   <table class="table table-striped">

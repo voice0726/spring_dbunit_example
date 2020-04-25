@@ -10,10 +10,10 @@ import jp.voice0726.spring_junit_example.service.StudentService;
 import jp.voice0726.spring_junit_example.service.impl.AdminUserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
@@ -96,23 +96,25 @@ class StudentControllerTest {
             enrollments.add(en);
         }
 
-        List<StudentProfileDto> expectedList = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            StudentProfileDto dto = new StudentProfileDto();
-            dto.setId(1L);
-            dto.setGivenName("test");
-            dto.setFamilyName("test");
-            dto.setAdmissionYear(2000);
-            dto.setEnrollments(enrollments);
-            expectedList.add(dto);
+            Student stu = new Student();
+            stu.setId(1L);
+            stu.setGivenName("test");
+            stu.setFamilyName("test");
+            stu.setAdmissionYear(2000);
+            stu.setEnrollments(enrollments);
+            students.add(stu);
         }
 
-        for (StudentProfileDto dto : expectedList) {
-            when(studentService.getProfileById(ArgumentMatchers.any(Long.class))).thenReturn(dto);
-            mockMvc.perform(MockMvcRequestBuilders.get("/students/" + dto.getId()))
+        for (Student stu : students) {
+            when(studentService.getStudentById(ArgumentMatchers.any(Long.class))).thenReturn(stu);
+            ModelMapper modelMapper = new ModelMapper();
+            StudentProfileDto profile = modelMapper.map(stu, StudentProfileDto.class);
+            mockMvc.perform(MockMvcRequestBuilders.get("/students/" + profile.getId()))
                     .andDo(print())
                     .andExpect(view().name("students/profile"))
-                    .andExpect(model().attribute("profile", dto));
+                    .andExpect(model().attribute("profile", profile));
         }
 
     }

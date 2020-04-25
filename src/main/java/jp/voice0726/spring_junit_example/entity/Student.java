@@ -1,8 +1,8 @@
 package jp.voice0726.spring_junit_example.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Student extends AbstractEntity {
@@ -14,10 +14,6 @@ public class Student extends AbstractEntity {
     private Collection<Enrollment> enrollments;
     private long departmentId;
     private int admissionYear;
-    private long createdBy;
-    private Timestamp createdAt;
-    private long updatedBy;
-    private Timestamp updatedAt;
     private Department department;
 
     @Id
@@ -100,34 +96,29 @@ public class Student extends AbstractEntity {
         this.createdBy = createdBy;
     }
 
-    @Basic
-    @Column(name = "created_at")
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student that = (Student) o;
+        return id == that.id &&
+                departmentId == that.departmentId &&
+                admissionYear == that.admissionYear &&
+                studentId.equals(that.studentId) &&
+                password.equals(that.password) &&
+                givenName.equals(that.givenName) &&
+                familyName.equals(that.familyName) &&
+                Objects.equals(enrollments, that.enrollments) &&
+                department.equals(that.department) &&
+                createdBy == that.createdBy &&
+                createdAt.equals(that.createdAt) &&
+                updatedBy == that.updatedBy &&
+                updatedAt.equals(that.updatedAt);
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Basic
-    @Column(name = "updated_by")
-    public long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    @Basic
-    @Column(name = "updated_at")
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, studentId, password, givenName, familyName, enrollments, departmentId, admissionYear, department, createdBy, createdAt, updatedBy, updatedAt);
     }
 
     @ManyToOne
